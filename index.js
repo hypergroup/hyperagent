@@ -70,6 +70,7 @@ exports.on('request', function(req) {
  * @api public
  */
 
+Request.prototype.forceLoad =
 Request.prototype.ignoreCache = function() {
   this.set('cache-control', 'no-cache');
   return this;
