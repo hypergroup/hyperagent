@@ -1,0 +1,31 @@
+{
+  "name": "hyperagent",
+  "version": "0.1.0",
+  "description": "Hyper client with superagent interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CamShaft/hyperagent.git"
+  },
+  "keywords": [
+    "hyper",
+    "superagent"
+  ],
+  "author": "Cameron Bytheway <cameron@theflokk.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CamShaft/hyperagent/issues"
+  },
+  "dependencies": {
+    "envs": "~0.1.2",
+    "superagent": "~0.15.4",
+    "superagent-defaults": "~0.1.2"
+  },
+  "devDependencies": {
+    "should": "~1.2.2",
+    "mocha": "~1.12.0"
+  }
+}

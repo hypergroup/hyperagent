@@ -1,4 +1,4 @@
 hyperagent
 ==========
 
-Hyper client with superagentinterface
+Hyper client with superagent interface

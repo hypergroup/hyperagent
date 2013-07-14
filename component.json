@@ -1,0 +1,17 @@
+{
+  "name": "hyperagent",
+  "repo": "CamShaft/hyperagent",
+  "description": "Hyper client with superagent interface",
+  "version": "0.1.0",
+  "keywords": [],
+  "dependencies": {
+    "visionmedia/superagent": "*",
+    "CamShaft/superagent-defaults": "*",
+    "CamShaft/envs": "*"
+  },
+  "development": {},
+  "license": "MIT",
+  "scripts": [
+    "index.js"
+  ]
+}
