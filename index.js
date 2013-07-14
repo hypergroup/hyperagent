@@ -85,7 +85,9 @@ Request.prototype.ignoreCache = function() {
 var end = Request.prototype.end;
 
 Request.prototype.end = function(fn) {
+  var self = this;
   end.call(this, function(res) {
+    self.emit('response', res);
     if (!res.ok) return self.emit('error', res.body || new Error(res.text));
     fn(res);
   });
