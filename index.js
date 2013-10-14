@@ -2,11 +2,11 @@
  * Module dependencies
  */
 
-var superagent = require('superagent')
-  , Request = superagent.Request
-  , Response = superagent.Response
-  , defaults = require('superagent-defaults')
-  , envs = require('envs');
+var superagent = require('superagent');
+var Request = superagent.Request;
+var Response = superagent.Response;
+var defaults = require('superagent-defaults');
+var envs = require('envs');
 
 /**
  * Create the client
@@ -46,14 +46,17 @@ exports.on('request', function(req) {
   if (!exports.profile) return;
 
   // Start profiling the request
-  var done = exports.profile('response_time');
+  var done = exports.profile('hyperagent.response_time');
 
   req.on('response', function(res) {
-    var info = {method: req.method, url: req.url, code: res.status}
-      , request_id = res.headers['x-request-id'];
+    var info = {
+      url: req.url,
+      request_id: res.headers['x-request-id']
+    };
 
-    // Trace the request
-    if (request_id) info.request_id = request_id;
+    info['count#hyperagent.method.' + req.method] = 1;
+    info['count#hyperagent.status.' + res.status] = 1;
+    info['count#hyperagent.status-type.' + res.statusType] = 1;
 
     // Log the request
     done(info);
