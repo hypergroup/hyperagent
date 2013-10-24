@@ -29,7 +29,9 @@ module.exports = exports = function() {
  * Inherit from the client
  */
 
-exports.__proto__ = client;
+for (var method in client) {
+  if (typeof client[method] === 'function') exports[method] = client[method].bind(client);
+}
 
 /**
  * Expose the API_URL
@@ -41,7 +43,7 @@ exports.API_URL = envs('API_URL', '/api');
  * Profile the request
  */
 
-exports.on('request', function(req) {
+client.on('request', function(req) {
   // If they didn't give us a profile function don't do anything
   if (!exports.profile) return;
 
