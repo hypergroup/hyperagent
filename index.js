@@ -122,7 +122,7 @@ Response.prototype.follow = function(rel) {
  * @api public
  */
 
-Response.prototype.submit = function(name, values) {
+Response.prototype.submit = function(rel) {
   // TODO make sure the rel exists; if not emit an error
 
   var form = this.body[rel];
