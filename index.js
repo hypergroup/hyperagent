@@ -2,132 +2,102 @@
  * Module dependencies
  */
 
-var superagent = require('superagent');
-var Request = superagent.Request;
-var Response = superagent.Response;
+var hyperpath = require('hyper-path');
 var defaults = require('superagent-defaults');
-var envs = require('envs');
+var util = require('util');
 
 /**
- * Create the client
- */
-
-var client = defaults();
-
-/**
- * Make a call to the api root
+ * Create a hyperagent
  *
- * @return {Request}
- * @api public
+ * @param {String} root The root URL of the api
+ * @param {String} delim Optional delimeter. defaults to '.'
+ * @return {Client}
  */
 
-module.exports = exports = function() {
-  return client.get(exports.API_URL);
+module.exports = function(root, delim) {
+  var agent = createAgent(root);
+
+  function Client(path, fn) {
+    var req = hyperpath(path, agent, delim);
+    if (!fn) return req;
+    return req.on(fn);
+  }
+
+  Client.submit = function(path, body, fn) {
+    var req = Client(path);
+    var _get = req.get;
+    req.refresh = req.get = function(cb) {
+      _get.call(req, function(err, form) {
+        if (err) return fn(err);
+        if (!form || !form.action) return fn();
+
+        var method = (form.method || 'get').toLowerCase();
+        var req = agent.request[method](form.action);
+
+        method === 'get'
+          ? req.query(body)
+          : req.send(body);
+
+        req.end(function(err, res) {
+          if (err) return fn(err);
+          if (!res.ok) return fn(new HyperError(res));
+          fn(null, res.body, res);
+        });
+      });
+    };
+    if (!fn) return req;
+    return req.on(fn);
+  };
+
+  Client.use = function(fn) {
+    agent.request.on('request', fn);
+  };
+
+  return Client;
 };
 
 /**
- * Inherit from the client
+ * Create an agent using root
+ *
+ * @param {String} root
+ * @return {Agent}
+ * @api private
  */
 
-for (var method in client) {
-  if (typeof client[method] === 'function') exports[method] = client[method].bind(client);
+function createAgent(root) {
+  var request = defaults();
+
+  function Agent(fn) {
+    return Agent.get(root, fn);
+  }
+
+  Agent.get = function(href, fn) {
+    request
+      .get(href)
+      .end(function(err, res) {
+        if (err) return fn(err);
+        if (!res.ok) return fn(new HyperError(res));
+        fn(null, res.body, res);
+      });
+  };
+
+  Agent.request = request;
+
+  return Agent;
 }
 
 /**
- * Expose the API_URL
- */
-
-exports.API_URL = envs('API_URL', '/api');
-
-/**
- * Profile the request
- */
-
-client.on('request', function(req) {
-  // If they didn't give us a profile function don't do anything
-  if (!exports.profile) return;
-
-  // Start profiling the request
-  var done = exports.profile('hyperagent.response_time');
-
-  req.on('response', function(res) {
-    var info = {
-      url: req.url,
-      request_id: res.headers['x-request-id']
-    };
-
-    info['count#hyperagent.method.' + req.method] = 1;
-    info['count#hyperagent.status.' + res.status] = 1;
-    info['count#hyperagent.status-type.' + res.statusType] = 1;
-
-    // Log the request
-    done(info);
-  });
-});
-
-// TODO come up with a retry strategy
-// TODO set a reasonable timeout
-
-/**
- * Force request to ignore the local cache
+ * Create a hyper error given a superagent response
  *
- * @return {Request}
- * @api public
+ * @param {Response} res
  */
 
-Request.prototype.forceLoad =
-Request.prototype.ignoreCache = function() {
-  this.set('cache-control', 'no-cache');
-  return this;
+function HyperError(res) {
+  Error.call(this);
+  Error.captureStackTrace(this, arguments.callee);
+  this.name = 'HyperError';
+  this.status = res.status;
+  if (res.body && res.body.error) this.message = res.body.error.message;
+  else this.message = res.text;
 };
-
-/**
- * Patch the Request to emit errors when it's not 2xx
- *
- * @api public
- */
-
-var end = Request.prototype.end;
-
-Request.prototype.end = function(fn) {
-  var self = this;
-  end.call(this, function(res) {
-    self.emit('response', res);
-    if (!res.ok) return self.emit('error', res.body || new Error(res.text));
-    fn(res);
-  });
-};
-
-/**
- * Follow a link
- *
- * @return {Request}
- * @api public
- */
-
-Response.prototype.follow = function(rel) {
-  // TODO make sure the rel exists; if not emit an error
-
-  var href = typeof this.body[rel] === 'object'
-    ? this.body[rel].href
-    : this.body[rel];
-
-  return client.get(href);
-};
-
-/**
- * Submit a form
- *
- * @return {Request}
- * @api public
- */
-
-Response.prototype.submit = function(rel) {
-  // TODO make sure the rel exists; if not emit an error
-
-  var form = this.body[rel];
-
-  // TODO implement
-
-  return client.post(form.action);
-};
+util.inherits(HyperError, Error);
