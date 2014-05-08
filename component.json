@@ -1,13 +1,13 @@
 {
   "name": "hyperagent",
-  "repo": "CamShaft/hyperagent",
+  "repo": "hypergroup/hyperagent",
   "description": "Hyper client with superagent interface",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "keywords": [],
   "dependencies": {
     "visionmedia/superagent": "*",
-    "CamShaft/superagent-defaults": "*",
-    "CamShaft/envs": "*"
+    "camshaft/superagent-defaults": "*",
+    "camshaft/envs": "*"
   },
   "development": {},
   "license": "MIT",
