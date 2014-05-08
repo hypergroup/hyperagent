@@ -1,6 +1,6 @@
 {
   "name": "hyperagent",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "hyper+json client for node.js and the browser",
   "main": "index.js",
   "scripts": {
