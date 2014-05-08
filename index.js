@@ -41,7 +41,7 @@ module.exports = function(root, delim) {
         req.end(function(err, res) {
           if (err) return fn(err);
           if (!res.ok) return fn(new HyperError(res));
-          fn(null, res.body, res);
+          fn(null, res.body, res.links);
         });
       });
     };
