@@ -53,24 +53,9 @@ module.exports = function(root, delim) {
     agent.request.on('request', fn);
   };
 
-  /**
-   * Allow Client to set default headers
-   *
-   * @param {String|Object} attr Default headers to be set
-   */
-
-  Client.set = function(attr){
-    if(typeof attr === 'string' && arguments[1]) {
-      agent.request.set(arguments[0], arguments[1]);
-    } else if (typeof attr === 'object' && !arguments[1]) {
-      for (var key in attr) {
-        agent.request.set(key, attr[key]);
-      }
-    } else {
-      throw new Error('Client.set passed invalid argument.\n' +
-                      'Must be:\n\tClient.set("header", "value") --or--' +
-                      '\n\tClient.set({"header1": "value", "header2": "value"})');
-    }
+  Client.set = function(a, b){
+    agent.request.set(a, b);
+    return Client;
   };
 
   return Client;
