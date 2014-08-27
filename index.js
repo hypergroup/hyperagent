@@ -71,6 +71,8 @@ module.exports = function(root, delim) {
 
 function createAgent(root) {
   var request = defaults();
+  var req = request.request;
+  req.parse['application/hyper+json'] = req.parse['application/json'];
 
   function Agent(fn) {
     return Agent.get(root, fn);
@@ -79,6 +81,8 @@ function createAgent(root) {
   Agent.get = function(href, fn) {
     request
       .get(href)
+      .buffer() // buffer() shouldn't be needed if server is setting content-type?
+                // but some requests are needing this... hmm TODO: Fix?
       .end(function(err, res) {
         if (err) return fn(err);
         if (!res.ok) return fn(new HyperError(res));
