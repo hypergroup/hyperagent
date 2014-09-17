@@ -8,7 +8,8 @@
     "visionmedia/superagent": "*",
     "camshaft/superagent-defaults": "*",
     "hypergroup/hyper-path": "*",
-    "camshaft/envs": "*"
+    "camshaft/envs": "*",
+    "component/inherit": "~0.0.3"
   },
   "development": {},
   "license": "MIT",
