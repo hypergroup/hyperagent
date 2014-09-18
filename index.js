@@ -74,7 +74,9 @@ function createAgent(root) {
   var req = request.request;
   req.parse['application/hyper+json'] = req.parse['application/json'];
 
-  function Agent(fn) {
+  var Agent = {};
+
+  Agent.root = function(fn) {
     return Agent.get(root, fn);
   }
 
