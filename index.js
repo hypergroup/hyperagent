@@ -83,8 +83,6 @@ function createAgent(root) {
   Agent.get = function(href, fn) {
     request
       .get(href)
-      .buffer() // buffer() shouldn't be needed if server is setting content-type?
-                // but some requests are needing this... hmm TODO: Fix?
       .end(function(err, res) {
         if (err) return fn(err);
         if (!res.ok) return fn(new HyperError(res));
