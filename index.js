@@ -4,7 +4,6 @@
 
 var hyperpath = require('hyper-path');
 var defaults = require('superagent-defaults');
-var inherit = require('inherit');
 
 /**
  * Create a hyperagent
@@ -109,4 +108,3 @@ function HyperError(res) {
   if (res.body && res.body.error) this.message = res.body.error.message;
   else this.message = res.text;
 };
-inherit(HyperError, Error);
