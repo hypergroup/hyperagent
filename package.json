@@ -23,7 +23,7 @@
     "envs": "~0.1.2",
     "superagent": "^0.17.0",
     "superagent-defaults": "~0.1.2",
-    "hyper-path": "^0.1.2"
+    "hyper-path": "^1.0.0"
   },
   "devDependencies": {
     "should": "^3.2.0",
