@@ -5,7 +5,7 @@
   "version": "0.2.6",
   "keywords": [],
   "dependencies": {
-    "visionmedia/superagent": "*",
+    "tj/superagent": "*",
     "camshaft/superagent-defaults": "*",
     "hypergroup/hyper-path": "*",
     "camshaft/envs": "*",
