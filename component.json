@@ -2,10 +2,10 @@
   "name": "hyperagent",
   "repo": "hypergroup/hyperagent",
   "description": "Hyper client with superagent interface",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "keywords": [],
   "dependencies": {
-    "tj/superagent": "*",
+    "tj/superagent": "~0.2.0",
     "camshaft/superagent-defaults": "*",
     "hypergroup/hyper-path": "*",
     "camshaft/envs": "*",
