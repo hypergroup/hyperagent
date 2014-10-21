@@ -5,7 +5,7 @@
   "version": "0.2.7",
   "keywords": [],
   "dependencies": {
-    "tj/superagent": "~0.2.0",
+    "tj/superagent": "^0.20.0",
     "camshaft/superagent-defaults": "*",
     "hypergroup/hyper-path": "*",
     "camshaft/envs": "*",
