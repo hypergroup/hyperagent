@@ -26,9 +26,14 @@ module.exports = function(root, delim) {
     var req = Client(path);
     var _get = req.get;
     req.refresh = req.get = function(cb) {
+      cb = cb || this._fn;
       _get.call(req, function(err, form) {
-        if (err) return fn(err);
-        if (!form || !form.action) return fn();
+        if (err) return cb(err);
+        if (!form || !form.action) return cb();
+
+        for (var k in form.input || {}) {
+          if (!body[k] && form.input.hasOwnProperty(k)) body[k] = form.input[k].value;
+        }
 
         var method = (form.method || 'get').toLowerCase();
         var req = agent.request[method](form.action);
@@ -38,9 +43,9 @@ module.exports = function(root, delim) {
           : req.send(body);
 
         req.end(function(err, res) {
-          if (err) return fn(err);
-          if (!res.ok) return fn(new HyperError(res));
-          fn(null, res.body, res.links);
+          if (err) return cb(err);
+          if (!res.ok) return cb(new HyperError(res));
+          cb(null, res.body, res.links);
         });
       });
     };
