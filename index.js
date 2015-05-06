@@ -3,7 +3,7 @@
  */
 
 var hyperpath = require('hyper-path');
-var defaults = require('superagent-defaults');
+var createAgent = require('hyper-client-superagent');
 
 /**
  * Create a hyperagent
@@ -36,7 +36,7 @@ module.exports = function(root, delim) {
         }
 
         var method = (form.method || 'get').toLowerCase();
-        var req = agent.request[method](form.action);
+        var req = agent.context[method](form.action);
 
         method === 'get'
           ? req.query(body)
@@ -54,50 +54,16 @@ module.exports = function(root, delim) {
   };
 
   Client.use = function(fn) {
-    agent.request.on('request', fn);
+    agent.use(fn);
   };
 
   Client.set = function(a, b){
-    agent.request.set(a, b);
+    agent.header(a, b);
     return Client;
   };
 
   return Client;
 };
-
-/**
- * Create an agent using root
- *
- * @param {String} root
- * @return {Agent}
- * @api private
- */
-
-function createAgent(root) {
-  var request = defaults();
-  var req = request.request;
-  req.parse['application/hyper+json'] = req.parse['application/json'];
-
-  var Agent = {};
-
-  Agent.root = function(fn) {
-    return Agent.get(root, fn);
-  }
-
-  Agent.get = function(href, fn) {
-    request
-      .get(href)
-      .end(function(err, res) {
-        if (err) return fn(err);
-        if (!res.ok) return fn(new HyperError(res));
-        fn(null, res.body, res);
-      });
-  };
-
-  Agent.request = request;
-
-  return Agent;
-}
 
 /**
  * Create a hyper error given a superagent response

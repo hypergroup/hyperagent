@@ -21,9 +21,10 @@
   },
   "dependencies": {
     "envs": "~0.1.2",
+    "hyper-client-superagent": "^0.1.10",
+    "hyper-path": "^1.0.0",
     "superagent": "^0.17.0",
-    "superagent-defaults": "~0.1.2",
-    "hyper-path": "^1.0.0"
+    "superagent-defaults": "~0.1.2"
   },
   "devDependencies": {
     "should": "^3.2.0",
